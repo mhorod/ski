@@ -1,0 +1,24 @@
+main {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    align-items: center;
+    margin: auto;
+    gap: 20px;
+}
+
+#combinators-input {
+    width: 800px;
+    height: 150px;
+}
+
+#expr-input {
+    width: 800px;
+    height: 50px;
+}
+
+#eval-result {
+    width: 800px;
+    height: 50px;
+    border: 1px solid #444;
+}
