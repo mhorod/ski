@@ -189,7 +189,9 @@ function substitute(expr, subst) {
 
 const combinatorsInput = document.getElementById("combinators-input")
 if (!combinatorsInput.value) combinatorsInput.value = DEFAULT_COMBINATORS
+
 const exprInput = document.getElementById("expr-input")
+if (!exprInput.value) exprInput.value = "SKKx\nKab"
 
 function run() {
 
