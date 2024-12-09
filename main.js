@@ -127,6 +127,22 @@ function parseCombinators(combinatorsText) {
     return combinators
 }
 
+function applyCombinator(combinator, tail) {
+    const args = tail.slice(0, combinator.variables.length)
+    const left = tail.slice(combinator.variables.length)
+
+    const subst = new Map();
+    for (let i = 0; i < combinator.variables.length; i++) {
+        subst.set(combinator.variables[i], args[i])
+    }
+
+    const substResult = substitute(combinator.expr, subst)
+    if (left.length == 0)
+        return substResult
+    else
+        return new App([substResult, ...left])
+}
+
 function reduceOnce(expr, combinators) {
     if (expr instanceof Var) 
         return expr
@@ -134,20 +150,10 @@ function reduceOnce(expr, combinators) {
         const [head, ...tail] = expr.args.map(arg => reduceOnce(arg, combinators))    
         if (head instanceof Var && combinators.has(head.name)) {
             const combinator = combinators.get(head.name)
-            if (tail.length >= combinator.variables.length) {
-                const args = tail.slice(0, combinator.variables.length)
-                const left = tail.slice(combinator.variables.length)
-                const subst = new Map();
-                for (let i = 0; i < combinator.variables.length; i++) {
-                    subst.set(combinator.variables[i], args[i])
-                }
-                const substResult = substitute(combinator.expr, subst)
-                if (left.length == 0)
-                    return substResult
-                else
-                    return new App([substResult, ...left])
-            }
+            if (tail.length >= combinator.variables.length)
+                return applyCombinator(combinator, tail)
         }
+        return new App([head, ...tail])
     }
     return expr
 }
